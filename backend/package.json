@@ -1,0 +1,30 @@
+{
+  "name": "change-coding-challenge-2022-marcuskamen",
+  "version": "1.0.0",
+  "description": "Congrats!! You have been selected to engage in the next step of the Change++ application process.",
+  "main": "backend.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChangePlusPlusVandy/change-coding-challenge-2022-MarcusKamen.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ChangePlusPlusVandy/change-coding-challenge-2022-MarcusKamen/issues"
+  },
+  "homepage": "https://github.com/ChangePlusPlusVandy/change-coding-challenge-2022-MarcusKamen#readme",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "convert": "^4.6.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "musixmatch": "^0.1.6",
+    "node-fetch": "^3.2.10",
+    "nodemon": "^2.0.20",
+    "react": "^18.2.0"
+  }
+}
