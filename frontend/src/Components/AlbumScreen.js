@@ -11,6 +11,15 @@ function AlbumScreen() {
     var [track_title, setTrackTitle] = useState("");
     var [lyric, setLyric] = useState("");
     var [answer, setAnswer] = useState("");
+    var [correctSpace, setSpace] = useState(0);
+    var [badTrack1, setBadTrack1] = useState("");
+    var [badTrack2, setBadTrack2] = useState("");
+    var [badTrack3, setBadTrack3] = useState("");
+    var [space1, setSpace1] = useState("");
+    var [space2, setSpace2] = useState("");
+    var [space3, setSpace3] = useState("");
+    var [space4, setSpace4] = useState("");
+    var [alternate, setAlternate] = useState(0);
 
     // get lyrics from the album from the csv file
     async function getAlbum() {
@@ -23,6 +32,83 @@ function AlbumScreen() {
             setTrackTitle(info.data.track_title);
             setLyric(info.data.lyric);
 
+            var equal = false;
+            
+            var bad1;
+            while (!equal) {
+                bad1 = (await axios.get(`http://localhost:8080/album-lyric/${answer}`)).data.track_title;
+                if (bad1 !== info) {
+                    equal = true;
+                }
+            }
+
+            setBadTrack1(bad1);
+
+            equal = false;
+
+            var bad2;
+            while (!equal) {
+                bad2 = (await axios.get(`http://localhost:8080/album-lyric/${answer}`)).data.track_title;
+                if (bad2 !== bad1 && bad2 !== info) {
+                    equal = true;
+                }
+            }
+ 
+            setBadTrack2(bad2);
+
+            equal = false;
+
+            var bad3;
+            while (!equal) {
+                bad3 = (await axios.get(`http://localhost:8080/album-lyric/${answer}`)).data.track_title;
+                if (bad3 !== bad1 && bad3 !== bad2 && bad3 !== info) {
+                    equal = true;
+                }
+            }
+
+            setBadTrack3(bad3);
+
+        }
+    }
+
+    async function randomSpot() {
+        const rando = Math.floor(Math.random() * 4);
+        setSpace(rando);
+    }
+
+    async function answer1() {
+        if (correctSpace === 0) {
+            setSpace1(track_title);
+        } else {
+            setSpace1(badTrack1);
+        }
+    }
+
+    async function answer2() {
+        if (correctSpace === 0) {
+            setSpace2(badTrack1);
+        } else if (correctSpace === 1) {
+            setSpace2(track_title);
+        } else {
+            setSpace2(badTrack2);
+        }
+    }
+
+    async function answer3() {
+        if (correctSpace === 0 || correctSpace === 1) {
+            setSpace3(badTrack2);
+        } else if (correctSpace === 2) {
+            setSpace3(track_title);
+        } else {
+            setSpace3(badTrack3);
+        }
+    }
+
+    async function answer4() {
+        if (correctSpace === 3) {
+            setSpace4(track_title);
+        } else {
+            setSpace4(badTrack3);
         }
     }
 
@@ -54,20 +140,55 @@ function AlbumScreen() {
             }}/> }
             {lyric === "" && <button type="submit" onClick={() => {
                 getAlbum();
+                randomSpot();
             }}>Submit Album</button>}
         
             <p>{lyric}</p>
 
             {!(lyric === "") && <p>Guess the song:</p>}
 
-            {!(lyric === "") && <input type="text" value={guess} onChange={(e) => {
-                setGuess(e.target.value);
-            }}/>}
+            {!(lyric === "") && alternate === 0 && <button type="submit" onClick={() => {
+                answer1();
+                answer2();
+                answer3();
+                answer4();
+                setAlternate(1);
+            }}>Begin</button>}
 
-            {!(lyric === "") && <button type="submit" onClick={() => {
+            {!(lyric === "") && alternate === 1 && <button type="submit" onClick={() => {
+                setGuess(space1);
                 updateAccuracy();
                 getAlbum();
-            }}>Submit Guess</button>}
+                randomSpot();
+                setAlternate(0);
+            }}>{space1}</button>}
+
+
+            {!(lyric === "") && alternate === 1 && <button type="submit" onClick={() => {
+                setGuess(space2);
+                updateAccuracy();
+                getAlbum();
+                randomSpot();
+                setAlternate(0);
+            }}>{space2}</button>}
+
+
+            {!(lyric === "") && alternate === 1 && <button type="submit" onClick={() => {
+                setGuess(space3);
+                updateAccuracy();
+                getAlbum();
+                randomSpot();
+                setAlternate(0);
+            }}>{space3}</button>}
+
+
+            {!(lyric === "") && alternate === 1 && <button type="submit" onClick={() => {
+                setGuess(space4);
+                updateAccuracy();
+                getAlbum();
+                randomSpot();
+                setAlternate(0);
+            }}>{space4}</button>}
 
             <p>{correctness}</p> 
             {correctness === "Wrong" && <p>Correct answer: {correct}</p>}

@@ -52,14 +52,7 @@ function Guess() {
         setAlbum(allAlbums.names[rando]);
         const allTracks = (await axios.get(`http://localhost:8080/track/${randomAlbum}`)).data;
         const rando2 = Math.floor(Math.random() * allTracks.ids.length);
-        const randomTrack = allTracks.ids[rando2];
         var goodTrackName = allTracks.names[rando2];
-        // for (var i = 0; i < allTracks.names[rando2].length; ++i) {
-        //     if (allTracks.names[rando2].at(i) === "(" || allTracks.names[rando2].at(i) === "-") {
-        //         break;
-        //     }
-        //     goodTrackName = goodTrackName + allTracks.names[rando2].at(i);
-        // }
 
         if (numOfAnswer === 1) {
             setBadTrack1(goodTrackName);
